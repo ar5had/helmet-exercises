@@ -207,6 +207,7 @@ var ninetyDaysInMilliseconds = 90*24*60*60*1000;
 module.exports = app;
 var api = require('./server.js');
 app.use(express.static('public'));
+// The HTTP Strict-Transport-Security response header (often abbreviated as HSTS) is a security feature that lets a web site tell browsers that it should only be communicated with using HTTPS, instead of using HTTP.
 app.disable('strict-transport-security');
 app.use('/_api', api);
 app.get("/", function (request, response) {

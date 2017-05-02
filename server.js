@@ -10,14 +10,19 @@ var path = require('path');
 
 app.use(function(req, res, next) {
   res.set({
+    // pages/websites you wish to allow to connect; * means all
     "Access-Control-Allow-Origin" : "*",
+    // Request headers you wish to allow
     "Access-Control-Allow-Headers" : "Origin, X-Requested-With, content-type, Accept"
   });
+  // 'x-powered-by' is a header. It doesn't tell the browser anything except that the application is powered by Express (should you wish to look at that in chrome dev tools). Express is a server side framework.
   app.disable('x-powered-by');
   next();
 });
 
+// any path matching /file/*
 app.get('/file/*?', function(req, res, next) {
+  console.log('req.params in serverjs line 25',req.params);
   if(req.params[0] === '.env') { return next({status: 401, message: 'ACCESS DENIED'}) }
   fs.readFile(path.join(__dirname, req.params[0]), function(err, data){
     if(err) { return next(err) }
@@ -43,6 +48,7 @@ app.get('/app-info', function(req, res) {
     var hObj = {};
     hs.forEach(h => {hObj[h] = res._headers[h]});
     delete res._headers['strict-transport-security'];
+    console.log('hobj, appMainRouteStack', hObj, appMainRouteStack);
   res.json({headers: hObj, appStack: appMainRouteStack });
 });
 
